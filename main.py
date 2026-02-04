@@ -6,6 +6,7 @@ input = sys.stdin.readline
 
 N,M,Q = list(map(int,input().split(" ")))
 
+pens:list[int] = []
 highest_prettiness = [0 for _ in range(M)]
 greatest_second:int = 0
 
@@ -19,9 +20,30 @@ for i in range(N):
     elif (greatest_second < p):
         greatest_second = p
 
+    pens.append(p)
+
 
 lowest_high = min(highest_prettiness)
 #print(lowest_high, greatest_second, highest_prettiness)
 total = sum(highest_prettiness) - lowest_high + max(lowest_high,greatest_second)
 
 _=print(str(total))
+
+
+for i in range(Q):
+    md,i,nw = list(map(int,input().split(" ")))
+    
+    if (md == 1):
+        ...
+    else:
+        prev = pens[i-1]
+        pens[i-1] = nw
+        if nw > highest_prettiness[0]:
+            highest_prettiness[0] = nw
+        elif prev == highest_prettiness[0]:
+            highest_prettiness[0] = max(pens)
+
+
+    
+
+    _=print(highest_prettiness[0])
