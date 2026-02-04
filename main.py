@@ -1,23 +1,15 @@
-import heapq
-from dataclasses import dataclass, field
 
 #solves for part 1
 
 ### declare classes and constants
 
-@dataclass(order=True)
 class Pen:
-    colour:int=field(compare=False) # this makes heapq ignore this value when ordering the class
+    colour:int # this makes heapq ignore this value when ordering the class
     prettiness:int # heapq will sort by prettiness. Least to highest
 
     def __init__(self, colour:int, prettiness:int):
         self.colour = colour 
-        self.prettiness = -prettiness  # negative so that we get to use max_heap
-
-
-    def __repr(self):
-        return f"C: {self.colour} | P: {self.prettiness}"
-
+        self.prettiness = prettiness  
 
 
 def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
@@ -33,7 +25,7 @@ def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
         if len(pen_heaps[colour])>1:
             test_pen = pen_heaps[colour][1]
             if (second_biggest is not None):
-                if test_pen.prettiness < second_biggest.prettiness:
+                if test_pen.prettiness > second_biggest.prettiness:
                     second_biggest = test_pen
             else:
                 second_biggest = test_pen
@@ -44,7 +36,7 @@ def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
         
         test_pen = pen_heaps[colour][0]
         if (first_smallest is not None):
-            if test_pen.prettiness > first_smallest.prettiness:
+            if test_pen.prettiness < first_smallest.prettiness:
                 first_smallest = test_pen
         else:
             first_smallest = test_pen
@@ -55,7 +47,7 @@ def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
         prettiness = first_smallest.prettiness
 
         if (second_biggest is not None):
-            prettiness = first_smallest.prettiness if first_smallest.prettiness < second_biggest.prettiness else second_biggest.prettiness
+            prettiness = first_smallest.prettiness if first_smallest.prettiness > second_biggest.prettiness else second_biggest.prettiness
     
 
         for colour in pen_heaps.keys():
@@ -65,7 +57,7 @@ def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
                 continue
 
             prettiness += pen_heaps[colour][0].prettiness
-    return -prettiness # to compile REMOVE THIS LINE
+    return prettiness # to compile REMOVE THIS LINE
 
 
 
@@ -76,7 +68,7 @@ pens,colours,images = list(map(int,input().split(" ")))
 
 
 # declare variables
-pen_heaps:dict[int,list[Pen]] = {x+1:[] for x in range(colours)} # organized by colour in the dict, then by heap
+pen_heaps:dict[int,list[Pen]] = {x+1:[] for x in range(colours)} # organized by colour in the dict, then by ordered list
 
 
 pen_address:dict[int,Pen] = {}
@@ -88,8 +80,11 @@ for i in range(pens):
     # push newly made Pen object to priority queue
     pen:Pen = Pen(colour,prettiness)
     
-    heapq.heappush(pen_heaps[colour],pen)
+    pen_heaps[colour].append(pen)
     pen_address[i] = pen
+
+for colour in pen_heaps.keys():
+    pen_heaps[colour].sort(key=lambda x: x.prettiness,reverse=True)
 
 print(getMaxPrettiness(pen_heaps,colours))
 
