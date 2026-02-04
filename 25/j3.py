@@ -1,10 +1,11 @@
 ### ccc '25 j3
 import re
 
-patternStr = "([A-Z])"
-patternInt = "(-?\\d+)"
+
 loops = int(input())
 words = [input() for _ in range(loops)]
+patternStr = "([A-Z])"
+patternInt = "(-?\\d+)"
 
 for i in range(loops):
     

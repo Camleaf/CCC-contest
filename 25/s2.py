@@ -1,9 +1,11 @@
 ### ccc '25 s2
-import re
 
 # get input
 raw_pattern:str = input()
-index = int(input())
+idx = int(input())
+
+
+import re
 
 # declare variables
 p_lengths:list[int] = []
@@ -21,7 +23,7 @@ for group in found:
     total_len += int(group[1:])
 
 # use modulus to reduce excess cycles
-index %= total_len
+idx %= total_len
 
 # reduce the index by p_lengths[i] for each iteraton in p_lengths
 #   if resulting index is smaller than 0, 
@@ -29,8 +31,8 @@ index %= total_len
 #       break loop
 
 for i,length in enumerate(p_lengths):
-    index -= length
-    if index < 0:
+    idx -= length
+    if idx < 0:
         print(p_letters[i])
         break
     

@@ -1,26 +1,39 @@
+from typing import List # 3.9 type hinting doesnt work on cccgrader so here we are
+### ccc '25 s2
 
-### ccc '25 j3
+# get input
+raw_pattern:str = input()
+idx = int(input())
+
+
 import re
 
-patternStr = "([A-Z])"
-patternInt = "(-?\\d+)"
-loops = int(input())
-words = [input() for _ in range(loops)]
+# declare variables
+p_lengths:List[int] = []
+p_letters:List[str] = []
+total_len = 0
 
-for i in range(loops):
+# parse string input using regex
+pattern = "(.\\d+)"
+found:List[str] = re.findall(pattern, raw_pattern)
+
+# sort regex group into letters and lengths
+for group in found:
+    p_letters.append(group[0])
+    p_lengths.append(int(group[1:]))
+    total_len += int(group[1:])
+
+# use modulus to reduce excess cycles
+idx %= total_len
+
+# reduce the index by p_lengths[i] for each iteraton in p_lengths
+#   if resulting index is smaller than 0, 
+#       print the letter at p_letters[i]
+#       break loop
+
+for i,length in enumerate(p_lengths):
+    idx -= length
+    if idx < 0:
+        print(p_letters[i])
+        break
     
-
-    word = words[i]
-    foundStr:list[str] = re.findall(patternStr, word)
-    foundInt:list[str] = re.findall(patternInt, word)
-
-    total = 0
-    stringbuild = ''
-
-    for token in foundStr:
-        stringbuild += token
-
-    for token in foundInt:
-        total += int(token)
-
-    print(stringbuild + str(total))
