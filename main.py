@@ -1,4 +1,6 @@
-
+import sys
+print = sys.stdout.write
+input = sys.stdin.readline
 #solves for part 1
 
 ### declare classes and constants
@@ -12,7 +14,11 @@ class Pen:
         self.prettiness = prettiness  
 
 
-def getMaxPrettiness(pen_heaps:dict[int,list[Pen]],colours:int)->int:
+def getMaxPrettiness(pen_heaps:dict[int,list[Pen]])->int:
+
+    for colour in pen_heaps.keys():
+        pen_heaps[colour].sort(key=lambda x: x.prettiness,reverse=True)
+
     # find greatest second pen, to switch
     
     second_biggest:Pen|None = None
@@ -83,10 +89,24 @@ for i in range(pens):
     pen_heaps[colour].append(pen)
     pen_address[i] = pen
 
-for colour in pen_heaps.keys():
-    pen_heaps[colour].sort(key=lambda x: x.prettiness,reverse=True)
 
-print(getMaxPrettiness(pen_heaps,colours))
+_=print(str(getMaxPrettiness(pen_heaps))+"\n")
+
+for image_num in range(images):
+    mode, index, new = list(map(int,input().split(" ")))
+    
+    idx_pen:Pen = pen_address[index-1]
+    
+    if mode == 1:
+        pen_heaps[idx_pen.colour].remove(idx_pen)
+        idx_pen.colour = new
+        pen_heaps[idx_pen.colour].append(idx_pen)
+        
+    else:
+        pen_address[index-1].prettiness = new
+
+    
+    _=print(str(getMaxPrettiness(pen_heaps))+"\n")
 
 
 
