@@ -1,3 +1,4 @@
+# idea for optimization. only store top two layers. will need to fix system though
 import sys
 print = sys.stdout.write
 input = sys.stdin.readline
