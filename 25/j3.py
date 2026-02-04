@@ -1,16 +1,25 @@
 ### ccc '25 j3
+import re
 
+patternStr = "([A-Z])"
+patternInt = "(-?\\d+)"
+loops = int(input())
+words = [input() for _ in range(loops)]
 
+for i in range(loops):
+    
 
+    word = words[i]
+    foundStr:list[str] = re.findall(patternStr, word)
+    foundInt:list[str] = re.findall(patternInt, word)
 
-for i in range(int(input())):
-    new_total:int = 0
-    new_string:str = ''
+    total = 0
+    stringbuild = ''
 
-    for letter in input():
-        if letter not in "abcdefghijklmnopqrstuvwxyz".upper():
-            continue
-        elif letter in "123456789":
-            new_total += int(letter)
+    for token in foundStr:
+        stringbuild += token
 
-    print(new_string+str(new_total))
+    for token in foundInt:
+        total += int(token)
+
+    print(stringbuild + str(total))

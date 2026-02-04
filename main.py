@@ -4,11 +4,13 @@ import re
 
 patternStr = "([A-Z])"
 patternInt = "(-?\\d+)"
+loops = int(input())
+words = [input() for _ in range(loops)]
 
-for i in range(int(input())):
+for i in range(loops):
     
 
-    word = input()
+    word = words[i]
     foundStr:list[str] = re.findall(patternStr, word)
     foundInt:list[str] = re.findall(patternInt, word)
 
