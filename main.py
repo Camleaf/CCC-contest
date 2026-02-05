@@ -1,39 +1,84 @@
-from typing import List # 3.9 type hinting doesnt work on cccgrader so here we are
-### ccc '25 s2
+### ccc '25 j5
+from typing import Dict, List, Tuple
+import sys
 
-# get input
-raw_pattern:str = input()
-idx = int(input())
+sys.setrecursionlimit(2147483647)
+rows:int = int(input())
+cols:int = int(input())
+max_count:int = int(input())
 
 
-import re
+def get_tile_cost(x:int,y:int) -> int:
+    base = (x+1) + (y*cols)
+    base %= max_count
+    if base == 0: base = max_count    
 
-# declare variables
-p_lengths:List[int] = []
-p_letters:List[str] = []
-total_len = 0
+    return base
 
-# parse string input using regex
-pattern = "(.\\d+)"
-found:List[str] = re.findall(pattern, raw_pattern)
 
-# sort regex group into letters and lengths
-for group in found:
-    p_letters.append(group[0])
-    p_lengths.append(int(group[1:]))
-    total_len += int(group[1:])
 
-# use modulus to reduce excess cycles
-idx %= total_len
+dfs_cache:Dict[Tuple[int,int],int] = {}
 
-# reduce the index by p_lengths[i] for each iteraton in p_lengths
-#   if resulting index is smaller than 0, 
-#       print the letter at p_letters[i]
-#       break loop
+def dfs(x:int,y:int)->int:
 
-for i,length in enumerate(p_lengths):
-    idx -= length
-    if idx < 0:
-        print(p_letters[i])
+    # recursion err in class 3. Use the sys import thing
+    if (y == rows-1):
+        return get_tile_cost(x,y)
+
+    if (get_tile_cost(0,y) == 1 and y != 0): # if it has repeated
+        return get_tile_cost(x,y)
+
+    hashed_tile = (x,y)
+
+    if (hashed_tile in dfs_cache):
+        return dfs_cache[hashed_tile]
+
+    # propogate downstream
+
+    # base case
+        
+    downstream_arr:List[int] = []
+    for n_x in ((x-1),(x),(x+1)):
+
+        if (n_x < 0 or n_x >= cols):
+            continue
+
+        downstream_arr.append(
+            dfs(n_x, y+1),
+        )
+
+    minimum = min(downstream_arr) + get_tile_cost(x,y)
+
+    dfs_cache[hashed_tile] = minimum
+
+    return minimum
+
+
+start_loc_arr:List[int] = []
+for col_num in range(cols):
+    start_loc_arr.append(dfs(col_num,0))
+dfs_value = min(start_loc_arr)
+
+
+# get repeat count
+repeat_y = 0
+for y in range(rows):
+    if (get_tile_cost(0,y) == 1):
+        repeat_y = y
         break
-    
+
+if (repeat_y != 0):
+    repeated_times:int = rows // repeat_y
+    leftover:int = rows % repeat_y
+
+
+print(dfs_value)
+
+
+
+for i in range(rows):
+    x = ''
+    for j in range(cols):
+        x += str(get_tile_cost(j,i)) +" "
+
+    print(x)

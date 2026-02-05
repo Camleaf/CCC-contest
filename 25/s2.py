@@ -1,3 +1,4 @@
+from typing import List # 3.9 type hinting doesnt work on cccgrader so here we are
 ### ccc '25 s2
 
 # get input
@@ -8,13 +9,13 @@ idx = int(input())
 import re
 
 # declare variables
-p_lengths:list[int] = []
-p_letters:list[str] = []
+p_lengths:List[int] = []
+p_letters:List[str] = []
 total_len = 0
 
 # parse string input using regex
 pattern = "(.\\d+)"
-found:list[str] = re.findall(pattern, raw_pattern)
+found:List[str] = re.findall(pattern, raw_pattern)
 
 # sort regex group into letters and lengths
 for group in found:
@@ -36,4 +37,3 @@ for i,length in enumerate(p_lengths):
         print(p_letters[i])
         break
     
-
