@@ -9,3 +9,4 @@ print(2*min(
         (y1+y2) + max(x1,x2)
     )
 )
+
