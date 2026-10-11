@@ -1,50 +1,45 @@
 #include "iostream"
-#include "vector"
+#include <vector>
+
 using namespace std;
 
 
 
 void solve(){
-    int parkingSpots; // cannot be 0
-    int lightsNum; // can be 0
-    int questions;
-
-    cin >> parkingSpots;
-    cin >> lightsNum;
-    cin >> questions;
+    int N, L, Q; // parking spots, lights, questions
+    cin >> N >> L >> Q;
     
-
-    std::vector<int> diff(parkingSpots+2,0);
+    vector<int> diff(N+2); 
     
-    for (int i =0; i<lightsNum;i++){ // Difference array usage from google
-        int spot,spread;
-        cin >> spot >> spread;
-
-        int low = max(1,spot-spread);
-        int high = min(parkingSpots, spread+spot);
-
+    for (int i = 0; i<L;i++){
+        int x, width; // x position,         
+        cin >> x >> width;
+    
+        int low = max(1, x-width); // bounds so that the 
+        int high = min(N, x+width);
+        
         diff[low] += 1;
-        if (high+1 <= parkingSpots){
-            diff[high+1] -= 1;
+        if (high+1 <= N){
+            diff[high+1] -=1;
         }
     }
-
-    std::vector<int> cover(parkingSpots+1,0);
-    for (int i = 1; i <= parkingSpots;i++){
-        cover[i] = cover[i-1] + diff[i];
-    }
-
     
 
-    bool qArr[questions];
-    for (int i = 0;i<questions;i++){
-        int q;
-        cin >> q;
+    vector<int> lit_spots(N+1);
+    lit_spots[0] = diff[0];
+    for (int i = 1; i<N; i++){
+        lit_spots[i] = lit_spots[i-1] + diff[i];
+    }
+    
+
+    for (int i = 0;i<Q;i++){
+        int query;
+        cin >> query;
         
-        cout << ((cover[q] > 0) ? "Y" : "N") << endl;
-    }
+        if (lit_spots[query] > 0) cout << "Y" << endl;
+        else cout << "N" << endl;
 
-    
+    }
 }
 
 

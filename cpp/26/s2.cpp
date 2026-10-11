@@ -29,6 +29,17 @@ void solve(){
         }
     }
 
+
+/*
+ *  
+ *  1  2  3  4  5  6
+ * (spot 2,spread 3)
+ *
+ *0  0  0  0  0  0  0  0
+ *0  1  0  0  0  0  -1  0
+ *
+ */
+
     std::vector<int> cover(parkingSpots+1,0);
     for (int i = 1; i <= parkingSpots;i++){
         cover[i] = cover[i-1] + diff[i];
