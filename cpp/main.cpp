@@ -27,8 +27,10 @@ long long get_q_score(vector<multiset<pen,penComparePretty>> sorted_pens, int N,
     for (auto s : sorted_pens){
         auto it = s.begin();
         if (it->p < low) low = it->p;
-        ++it;
+        it++;
+        if (it==s.end()) continue;
         if (it->p > high) high = it->p;
+        
     }
     if (high > low){
         score = score - low + high;
